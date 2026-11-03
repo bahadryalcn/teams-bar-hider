@@ -104,6 +104,7 @@ internal static class Startup
 internal sealed class Tray : ApplicationContext
 {
     private readonly NotifyIcon icon = new NotifyIcon();
+    private readonly Icon applicationIcon;
     private readonly System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
     private readonly Dictionary<IntPtr, WindowIdentity> hidden = new Dictionary<IntPtr, WindowIdentity>();
     private readonly EventWaitHandle stop;
@@ -130,7 +131,13 @@ internal sealed class Tray : ApplicationContext
         menu.Items.Add(startup);
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add("Çıkış / Quit", null, delegate { ExitThread(); });
-        icon.Icon = SystemIcons.Application;
+        using (var stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("TeamsBarHider.AppIcon.ico"))
+        {
+            if (stream == null) throw new InvalidOperationException("The application icon is missing.");
+            using (var source = new Icon(stream, SystemInformation.SmallIconSize))
+                applicationIcon = (Icon)source.Clone();
+        }
+        icon.Icon = applicationIcon;
         icon.Text = "Teams Bar Hider";
         icon.ContextMenuStrip = menu;
         icon.DoubleClick += delegate { SetActive(!active); };
@@ -184,7 +191,7 @@ internal sealed class Tray : ApplicationContext
     }
     protected override void Dispose(bool disposing)
     {
-        if (disposing) { timer.Dispose(); icon.Dispose(); }
+        if (disposing) { timer.Dispose(); icon.Dispose(); applicationIcon.Dispose(); }
         base.Dispose(disposing);
     }
 }

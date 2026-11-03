@@ -1,5 +1,7 @@
 # Teams Bar Hider
 
+<img src="https://raw.githubusercontent.com/bahadryalcn/teams-bar-hider/main/assets/app-icon.png" width="80" height="80" alt="Teams Bar Hider icon">
+
 [![Build and test](https://github.com/bahadryalcn/teams-bar-hider/actions/workflows/ci.yml/badge.svg)](https://github.com/bahadryalcn/teams-bar-hider/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 

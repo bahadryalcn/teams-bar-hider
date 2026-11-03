@@ -6,13 +6,14 @@ $dist = Join-Path $projectRoot 'dist/windows'
 New-Item -ItemType Directory -Force -Path $dist | Out-Null
 $applicationSource = Join-Path $PSScriptRoot 'TeamsBarHider.cs'
 $applicationOutput = Join-Path $dist 'TeamsBarHider.exe'
-& $compiler /nologo /target:winexe /platform:anycpu /optimize+ /reference:System.Windows.Forms.dll /reference:System.Drawing.dll "/out:$applicationOutput" $applicationSource
+$applicationIcon = Join-Path $projectRoot 'assets/app.ico'
+& $compiler /nologo /target:winexe /platform:anycpu /optimize+ /reference:System.Windows.Forms.dll /reference:System.Drawing.dll "/win32icon:$applicationIcon" "/resource:$applicationIcon,TeamsBarHider.AppIcon.ico" "/out:$applicationOutput" $applicationSource
 if ($LASTEXITCODE -ne 0) { throw 'Application compilation failed.' }
 $checks = Join-Path $projectRoot 'temp/verification'
 New-Item -ItemType Directory -Force -Path $checks | Out-Null
 $testOutput = Join-Path $checks 'WindowsTests.exe'
 $testSource = Join-Path $projectRoot 'tests\WindowsTests.cs'
-& $compiler /nologo /target:exe /main:WindowsTests /reference:System.Windows.Forms.dll /reference:System.Drawing.dll "/out:$testOutput" $applicationSource $testSource
+& $compiler /nologo /target:exe /main:WindowsTests /reference:System.Windows.Forms.dll /reference:System.Drawing.dll "/resource:$applicationIcon,TeamsBarHider.AppIcon.ico" "/out:$testOutput" $applicationSource $testSource
 if ($LASTEXITCODE -ne 0) { throw 'Test compilation failed.' }
 # The test executable creates a hidden native fixture; no interactive console is opened.
 $test = Start-Process -FilePath "$checks/WindowsTests.exe" -WindowStyle Hidden -Wait -PassThru -RedirectStandardOutput "$checks/windows-tests.log" -RedirectStandardError "$checks/windows-tests-error.log"

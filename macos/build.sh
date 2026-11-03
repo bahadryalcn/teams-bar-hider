@@ -2,7 +2,8 @@
 set -euo pipefail
 project_root="$(cd "$(dirname "$0")/.." && pwd)"
 app="$project_root/dist/macos/Teams Bar Hider.app"
-mkdir -p "$app/Contents/MacOS"
+mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
+cp "$project_root/assets/app.icns" "$app/Contents/Resources/AppIcon.icns"
 sdk="$(xcrun --sdk macosx --show-sdk-path)"
 MACOSX_DEPLOYMENT_TARGET=12.0 swiftc -O -sdk "$sdk" "$project_root/macos/TeamsBarHider.swift" -o "$app/Contents/MacOS/TeamsBarHider" -framework AppKit -framework ApplicationServices
 cat > "$app/Contents/Info.plist" <<'PLIST'
@@ -13,6 +14,7 @@ cat > "$app/Contents/Info.plist" <<'PLIST'
 <key>CFBundleName</key><string>Teams Bar Hider</string>
 <key>CFBundleDisplayName</key><string>Teams Bar Hider</string>
 <key>CFBundleExecutable</key><string>TeamsBarHider</string>
+<key>CFBundleIconFile</key><string>AppIcon.icns</string>
 <key>CFBundlePackageType</key><string>APPL</string>
 <key>CFBundleShortVersionString</key><string>0.5.0</string>
 <key>CFBundleVersion</key><string>0.5.0</string>
