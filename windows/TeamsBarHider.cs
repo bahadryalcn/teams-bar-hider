@@ -10,6 +10,11 @@ using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Win32;
 
+[assembly: System.Reflection.AssemblyTitle("Teams Bar Hider")]
+[assembly: System.Reflection.AssemblyVersion("0.5.0.0")]
+[assembly: System.Reflection.AssemblyFileVersion("0.5.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersion("0.5.0")]
+
 internal static class Native
 {
     internal delegate bool Enumerate(IntPtr window, IntPtr state);

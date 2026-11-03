@@ -9,7 +9,9 @@ It targets recognized Teams sharing-toolbars only. Meeting windows, the compact 
 
 ## Install
 
-Download a package from a successful [Build and test run](https://github.com/bahadryalcn/teams-bar-hider/actions/workflows/ci.yml). Expand **Artifacts**, download the package for your platform and extract both the artifact archive and the package inside it. GitHub requires sign-in to download workflow artifacts; these development builds expire after 14 days. Alternatively, build from source below.
+Download the package for your platform from [Releases](https://github.com/bahadryalcn/teams-bar-hider/releases/latest) and extract it. Alternatively, build from source below.
+
+Development builds are also available from successful [Build and test runs](https://github.com/bahadryalcn/teams-bar-hider/actions/workflows/ci.yml). These artifacts require GitHub sign-in, expire after 14 days and contain a second package archive to extract.
 
 ### Windows
 
