@@ -1,0 +1,62 @@
+name: Build and test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    name: Windows
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build and run native checks
+        shell: powershell
+        run: ./windows/build.ps1
+      - name: Package
+        shell: pwsh
+        run: |
+          $files = 'TeamsBarHider.exe', 'Install.ps1', 'Uninstall.ps1', 'README.md', 'LICENSE', 'THIRD-PARTY-NOTICES.md'
+          $paths = $files | ForEach-Object { Join-Path 'dist/windows' $_ }
+          Compress-Archive -LiteralPath $paths -DestinationPath dist/TeamsBarHider-Windows.zip
+      - name: Upload package
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: TeamsBarHider-Windows
+          path: dist/TeamsBarHider-Windows.zip
+          if-no-files-found: error
+          retention-days: 14
+
+  macos:
+    name: macOS
+    runs-on: macos-15
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build, test and verify signature
+        run: bash macos/build.sh
+      - name: Package
+        run: |
+          cd dist/macos
+          ditto -c -k --sequesterRsrc . "../TeamsBarHider-macOS-$(uname -m).zip"
+      - name: Upload package
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: TeamsBarHider-macOS
+          path: dist/TeamsBarHider-macOS-*.zip
+          if-no-files-found: error
+          retention-days: 14

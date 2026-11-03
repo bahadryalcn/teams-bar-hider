@@ -1,0 +1,21 @@
+# Build outputs and local diagnostics
+/dist/
+/temp/
+inspection.txt
+/.artifact
+*.log
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.user
+*.suo
+# Local configuration and signing material
+.env
+.env.*
+*.pfx
+*.p12
+*.pem
+*.key
